@@ -12,5 +12,4 @@ data("exprs",package='SRGA') # makesure the input exprs is a matrix/dataframe wi
 data("Sene.marker",package='SRGA')
 select.name = sample(rownames(exprs),100)
 example.result = signature_related_mRNA(exprs,Sene.marker,covariate,select.name,scale.flag=FALSE)
-}
 ```
