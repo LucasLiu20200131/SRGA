@@ -6,6 +6,7 @@ signature-related gene analysis
 
 # Usage
 ```
+library("SRGA")
 data("covariate",package='SRGA')
 data("exprs",package='SRGA') # makesure the input exprs is a matrix/dataframe with gene in rows and sample in columns.
 data("Sene.marker",package='SRGA')
