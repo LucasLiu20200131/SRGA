@@ -1,0 +1,19 @@
+Package: SRGA
+Type: Package
+Title: Signature-related gene analysis
+Version: 0.1.0
+Author: Sicheng Liu
+Maintainer: Sicheng Liu <liusc027@stu.scu.edu.cn>
+Description: To determine signature-related genes. (signature could be KEGG pathways, GO annotations or custom gene sets, et. al.)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: no
+Packaged: 2022-05-05 03:00:09 UTC; Sicheng
+Depends: R (>= 3.5.0)
+Imports:
+        fgsea,
+        scales,
+        Hmisc,
+        igraph,
+        tidyverse
