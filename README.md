@@ -7,7 +7,8 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("fgsea")
 install.packages(c("scales","Hmisc","igraph","tidyverse")) 
-devtools::install_github("LucasLiu20200131/SRGA")```
+devtools::install_github("LucasLiu20200131/SRGA")
+```
 
 # Usage
 ```
