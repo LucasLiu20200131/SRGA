@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Sicheng Liu
 Maintainer: Sicheng Liu <liusc027@stu.scu.edu.cn>
 Description: To determine signature-related genes. (signature could be KEGG pathways, GO annotations or custom gene sets, et. al.)
-License: What license is it under?
+License: GPL-3.0
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
