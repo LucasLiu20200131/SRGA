@@ -11,6 +11,11 @@
   rank_vis(SRGA.result)
 }
 
+\arguments{
+  \item{SRGA.result}{A data.frame object, output of signature_related_mRNA()}
+  \item{top.show}{Number of top genes to be displayed. Set 0 or FALSE to show nothing. Default 5.}
+}
+
 \examples{
   data("covariate",package='SRGA')
   data("exprs",package='SRGA') # makesure the input exprs is a matrix/dataframe with gene in rows and sample in columns.
