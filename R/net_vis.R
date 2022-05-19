@@ -25,5 +25,8 @@ net_vis <- function(SRGA.result,top.gene=5){
        vertex.label.cex=ifelse(V(g1)$name %in% unique(top_df$pathway),0.8,0.4),
        vertex.label.dist=ifelse(V(g1)$name %in% unique(top_df$pathway),0,0.9),
        vertex.label.color='black')
+  legend('topright',legend=c('Signature','Gene'),pt.cex= 1.5,
+         pch=16,col= c('#fd3737','#a3bae2'),pt.bg = 'white',title.col = 'white',
+         border = 'white',x.intersp = 0.5,text.col='black',cex = 0.8)
   return(top_df)
 }
