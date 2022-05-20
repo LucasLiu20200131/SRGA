@@ -18,7 +18,7 @@ col_vis <- function(SRGA.result,log2.flag=TRUE){
     all_pathway = all_pathway[all_pathway$n!=1,]
     all_pathway$pathway = factor(all_pathway$pathway,levels= all_pathway$pathway)
     p1=ggplot(all_pathway)+
-      geom_col(aes(x=pathway,y=log2(n)),fill='#61c8c0')+
+      geom_col(aes(x=pathway,y=log2(n)),fill='#61c8c0',color='black')+
       coord_flip()+
       theme_classic()+
       theme(axis.ticks.y = element_blank())+
@@ -28,7 +28,7 @@ col_vis <- function(SRGA.result,log2.flag=TRUE){
     message(paste0('There are ',n_pathway,' Signature(s) with number of related-genes more than 0, plotting them..'))
     all_pathway$pathway = factor(all_pathway$pathway,levels= all_pathway$pathway)
     p1=ggplot(all_pathway)+
-      geom_col(aes(x=pathway,y=n),fill='#61c8c0')+
+      geom_col(aes(x=pathway,y=n),fill='#61c8c0',color='black')+
       coord_flip()+
       theme_classic()+
       theme(axis.ticks.y = element_blank())+
