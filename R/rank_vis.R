@@ -8,11 +8,13 @@ rank_vis <- function(SRGA.result,top.show=5){
     }
   }
   pathway_rank_score=lapply(unique(SRGA.result$pathway),function(x)
-  {
-    p = SRGA.result[SRGA.result$pathway==x,]
-    r = p[order(p$sigValue),]
+  { p = SRGA.result[SRGA.result$pathway==x,]
+    if(sum(is.na(p$sigValue))==nrow(p)){
+      score = rep(0,nrow(p))
+    }else{
+    r = p[order(p$sigValue,na.last = F),]
     r$score = scales::rescale(1:nrow(r),c(0,1))
-    score  = r$score[match(p$mRNA,r$mRNA)]
+    score  = r$score[match(p$mRNA,r$mRNA)]}
     names(score) = p$mRNA
     return(score)
   })
@@ -22,7 +24,6 @@ rank_vis <- function(SRGA.result,top.show=5){
   all_rank_score = data.frame(all_rank_score,check.names = F)
   all_rank_score$rank <- rowMeans(all_rank_score)
   all_rank_score <- all_rank_score[order(all_rank_score$rank,decreasing = T),]
-  top20 <- rownames(all_rank_score)[1:20]
   all_rank_score$number = seq(1:nrow(all_rank_score))
   p1=ggplot(data=all_rank_score)+
     geom_point(aes(x=number,y=rank),color='#61c8c0')+
