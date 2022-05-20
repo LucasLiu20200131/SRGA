@@ -7,7 +7,6 @@ correlation_calculation <- function(mRNA_exp,covariate=NULL,select.name){
       library(pkg,warn.conflicts=F,character.only = T)
     }
   }
-  
   # PCC
   fun_mtx_pcr <- function(x,y,z){
     r12=cor(t(x),t(y))
@@ -21,7 +20,6 @@ correlation_calculation <- function(mRNA_exp,covariate=NULL,select.name){
     rrr=rup/rd
     return(rrr)
   }
-  
   if(is.null(covariate)){
     # cor
     cor.result=Hmisc::rcorr(t(mRNA_exp))
