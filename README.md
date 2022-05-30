@@ -1,5 +1,5 @@
 # SRGA
-signature-related gene analysis
+Signature-Related Gene Analysis
 
 # Install
 ```
