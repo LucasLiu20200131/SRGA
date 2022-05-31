@@ -20,6 +20,7 @@
   # PCC
   data("covariate",package='SRGA')
   data("exprs",package='SRGA')
+  exprs = gene_exclude(exprs,ex.per=0.3)
   set.seed(1)
   select.name = sample(rownames(exprs),100)
   RS=correlation_calculation(exprs,covariate,select.name)
