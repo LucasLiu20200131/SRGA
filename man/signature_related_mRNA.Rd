@@ -24,6 +24,7 @@
 \examples{
   data("covariate",package='SRGA')
   data("exprs",package='SRGA') # makesure the input exprs is a matrix/dataframe with gene in rows and sample in columns.
+  exprs = gene_exclude(exprs,ex.per=0.3)
   data("Sene.marker",package='SRGA')
   set.seed(1)
   select.name = sample(rownames(exprs),100)
