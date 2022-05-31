@@ -13,7 +13,7 @@ gene_exclude(exprs,ex.per=0.3)
 
 \arguments{
   \item{exprs}{Gene expression matrix}
-  \item{ex.per}{Gene with this proportion of zero expression in samples that to be excluded}
+  \item{ex.per}{Gene with this proportion of zero expression in samples that to be excluded. Default 0.3}
 }
 
 \examples{
