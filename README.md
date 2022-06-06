@@ -23,5 +23,6 @@ example.result = signature_related_mRNA(exprs,Sene.marker,covariate,select.name,
 col_vis(example.result,log2.flag = T)
 col_vis(example.result,log2.flag = F)
 rank_vis(example.result)
+rank_info = rank_vis(example.result,res.return="rank")
 net_info = net_vis(example.result,top.gene = 10)
 ```
