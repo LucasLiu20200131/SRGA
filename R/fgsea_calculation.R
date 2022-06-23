@@ -27,7 +27,7 @@ fgsea_calculation <-function (RS,signatures,scale.flag=FALSE){
                         size=NA,
                         leadingEdge=NA)
     fgseaRes = rbind(fgseaRes,addrow)}
-    fgseaRes$sigValue <- -log10(fgseaRes$pval) * fgseaRes$NES
+    fgseaRes$sigValue <- -log10(fgseaRes$padj) * fgseaRes$NES
     fgseaRes <- cbind(mRNA,fgseaRes)
     fgsea_all <- rbind(fgsea_all,fgseaRes)
   }
