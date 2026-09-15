@@ -1,13 +1,18 @@
 # SRGA
-Signature-Related Gene Analysis
 
-For an expression matrix, genes are denoted as $G_1, G_2, \ldots, G_n$, and samples as $S_1, S_2, \ldots, S_m$.
+**Signature Related Gene Analysis**
 
-## Gene correlation
+SRGA is an R package for identifying genes associated with predefined biological signatures based on gene expression correlation and gene set enrichment analysis.
+
+For an expression matrix, genes are denoted as $G_1, G_2, \ldots, G_n$, and samples are denoted as $S_1, S_2, \ldots, S_m$.
+
+## Method
+
+### Gene correlation
 
 The Pearson correlation coefficient between genes $G_i$ and $G_j$ is calculated across the $m$ samples as:
 
-$$
+```math
 CC_{ij} =
 \frac{
 \sum_{z=1}^{m}
@@ -16,15 +21,15 @@ CC_{ij} =
 \sqrt{\sum_{z=1}^{m}(G_{iz}-\bar{G}_i)^2}
 \sqrt{\sum_{z=1}^{m}(G_{jz}-\bar{G}_j)^2}
 }
-$$
+```
 
 where $G_{iz}$ and $G_{jz}$ represent the expression levels of genes $G_i$ and $G_j$ in sample $z$, respectively, and $\bar{G}_i$ and $\bar{G}_j$ represent their mean expression levels across samples.
 
-## Partial correlation
+### Partial correlation
 
-To account for an independent covariate, such as tumor purity, SRGA can use partial correlation. The partial correlation coefficient between $G_i$ and $G_j$, controlling for tumor purity $P$, is calculated as:
+To account for a potential covariate, such as tumor purity, SRGA can alternatively use partial correlation. For a covariate $P$, the partial correlation coefficient between $G_i$ and $G_j$ is calculated as:
 
-$$
+```math
 PCC_{ij} =
 \frac{
 CC_{ij} - CC_{iP}CC_{jP}
@@ -32,112 +37,187 @@ CC_{ij} - CC_{iP}CC_{jP}
 \sqrt{1-CC_{iP}^{2}}
 \sqrt{1-CC_{jP}^{2}}
 }
-$$
+```
 
-where $CC_{iP}$ and $CC_{jP}$ denote the correlation coefficients between tumor purity and the expression levels of $G_i$ and $G_j$, respectively.
+where $CC_{iP}$ and $CC_{jP}$ denote the correlation coefficients between the covariate $P$ and the expression levels of $G_i$ and $G_j$, respectively.
 
-Hereafter, the correlation coefficient between $G_i$ and $G_j$ is denoted as $\operatorname{cor}_{ij}$, with the corresponding statistical significance denoted as $p_{ij}$.
+Hereafter, $r_{ij}$ denotes the correlation coefficient used for genes $G_i$ and $G_j$, and $p_{ij}$ denotes its corresponding P value.
 
-## Relative score
+### Relative score
 
-For each selected gene $G_i$, its association with another gene $G_j$ is quantified using a relative score:
+For each selected gene $G_i$, its association with another gene $G_j$ is quantified using a relative score, $RS_{ij}$:
 
-$$
-RS_{ij}=
+```math
+RS_{ij} =
 -\log_{10}(p_{ij})
 \times
-\operatorname{sign}(\operatorname{cor}_{ij})
-$$
+\mathrm{sign}(r_{ij})
+```
 
-Genes are then ranked according to $RS_{ij}$ after removing self-correlations and infinite values.
+This formulation incorporates both the statistical evidence and direction of the correlation. Genes are ranked according to their relative scores after self correlations and infinite values are removed.
 
-## Signature enrichment score
+### Signature enrichment score
 
-For each selected gene, its ranked $RS$ gene list is subjected to GSEA against the input signatures. For signature $i$ and selected gene $G_j$, the signature value is calculated as:
+For each selected gene, the ranked gene list derived from the relative scores is subjected to gene set enrichment analysis against the input signatures.
 
-$$
-\operatorname{sigValue}_{ij}=
+For signature $i$ and selected gene $G_j$, the signature enrichment value $SV_{ij}$ is calculated as:
+
+```math
+SV_{ij} =
 -\log_{10}(p_{ij}^{\mathrm{GSEA}})
 \times
 NES_{ij}
-$$
+```
 
-where $p_{ij}^{\mathrm{GSEA}}$ is the statistical significance of the enrichment and $NES_{ij}$ is the corresponding normalized enrichment score.
+where $p_{ij}^{\mathrm{GSEA}}$ denotes the GSEA P value and $NES_{ij}$ denotes the corresponding normalized enrichment score.
 
-## Relative rank score
+### Relative rank score
 
-To compare enrichment results across signatures, the signature values are rescaled within each signature. For signature $i$ and gene $G_j$:
+To facilitate comparison across signatures, the signature enrichment values are rescaled within each signature.
 
-$$
-RRS_{ij}=
+For signature $i$ and selected gene $G_j$, the relative rank score $RRS_{ij}$ is calculated as:
+
+```math
+RRS_{ij} =
 \frac{
-\operatorname{sigValue}_{ij}
--
-\min_k(\operatorname{sigValue}_{ik})
+SV_{ij} - \min_k(SV_{ik})
 }{
-\max_k(\operatorname{sigValue}_{ik})
--
-\min_k(\operatorname{sigValue}_{ik})
+\max_k(SV_{ik}) - \min_k(SV_{ik})
 }
-$$
+```
 
 where the minimum and maximum are calculated across all evaluated genes $k$ for signature $i$.
 
-The final score of gene $G_j$ is calculated as the mean relative rank score across all $n$ input signatures:
+If $K$ signatures are provided, the final score of gene $G_j$ is calculated as the mean relative rank score across all signatures:
 
-$$
-\operatorname{Rank}(G_j)=
-\frac{1}{n}
-\sum_{i=1}^{n} RRS_{ij}
-$$
-
-
-# Install
+```math
+\mathrm{Rank}(G_j) =
+\frac{1}{K}
+\sum_{i=1}^{K} RRS_{ij}
 ```
-if (!require("BiocManager", quietly = TRUE))
+
+Genes can subsequently be prioritized according to this final score, with higher scores indicating stronger overall associations with the input signatures.
+
+# Installation
+
+Install the required packages and SRGA from GitHub:
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
+}
+
 BiocManager::install("fgsea")
-install.packages(c("scales","Hmisc","igraph","tidyverse")) 
+
+install.packages(
+    c("scales", "Hmisc", "igraph", "tidyverse", "devtools")
+)
+
 devtools::install_github("LucasLiu20200131/SRGA")
 ```
 
 # Usage
-First, attach this package and import data.
+
+## 1. Load SRGA and example data
+
+```r
+library(SRGA)
+
+data("covariate", package = "SRGA")
+data("exprs", package = "SRGA")
+data("Sene.marker", package = "SRGA")
 ```
-library("SRGA")
-data("covariate",package='SRGA')
-data("exprs",package='SRGA') # makesure the input exprs is a matrix/dataframe with gene in rows and sample in columns.
-exprs = gene_exclude(exprs,ex.per=0.3)
-data("Sene.marker",package='SRGA')
+
+The input expression data should be provided as a matrix or data frame with genes in rows and samples in columns.
+
+Genes with a high proportion of zero expression values can be removed using `gene_exclude()`:
+
+```r
+exprs <- gene_exclude(
+    exprs,
+    ex.per = 0.3
+)
+```
+
+For demonstration, randomly select 100 genes:
+
+```r
 set.seed(1)
-select.name = sample(rownames(exprs),100)
+
+select.name <- sample(
+    rownames(exprs),
+    100
+)
 ```
-Second, run SRGA
+
+## 2. Run SRGA
+
+```r
+example.result <- signature_related_mRNA(
+    exprs,
+    Sene.marker,
+    covariate,
+    select.name,
+    scale.flag = FALSE
+)
 ```
-example.result = signature_related_mRNA(exprs,Sene.marker,covariate,select.name,scale.flag=FALSE)
+
+## 3. Visualize the results
+
+### 3.1 Signature associated gene counts
+
+Use `col_vis()` to visualize the number of associated genes for each signature.
+
+With log2 transformation:
+
+```r
+col_vis(
+    example.result,
+    log2.flag = TRUE
+)
 ```
-We can now visualize results with 3 ways.  
-1.1 Draw a bar plot and count the number of related genes for each signature. Below are log2 normalized.
+
+![col\_vis\_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/col_vis_1.png)
+
+Without log2 transformation:
+
+```r
+col_vis(
+    example.result,
+    log2.flag = FALSE
+)
 ```
-col_vis(example.result,log2.flag = T)
-```
-![col_vis_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/col_vis_1.png)  
-1.2 number are not log2 normalized.
-```
-col_vis(example.result,log2.flag = F)
-```
-![col_vis_2](https://github.com/LucasLiu20200131/images/blob/main/git_image/col_vis_2.png)  
-2.1 Draw a scatter plot and rank the genes based on the average rank score of signature(s).
-```
+
+![col\_vis\_2](https://github.com/LucasLiu20200131/images/blob/main/git_image/col_vis_2.png)
+
+### 3.2 Gene ranking
+
+Use `rank_vis()` to visualize genes according to their average relative rank scores across signatures:
+
+```r
 rank_vis(example.result)
 ```
-![rank_vis_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/rank_vis_1.png)  
-we can also obtained the detailed rank information with:
+
+![rank\_vis\_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/rank_vis_1.png)
+
+Detailed ranking information can also be returned:
+
+```r
+rank_info <- rank_vis(
+    example.result,
+    res.return = "rank"
+)
 ```
-rank_info = rank_vis(example.result,res.return="rank")
+
+### 3.3 Signature gene network
+
+Use `net_vis()` to visualize the top genes associated with each signature. The function also returns information on the corresponding signature gene pairs:
+
+```r
+net_info <- net_vis(
+    example.result,
+    top.gene = 10
+)
 ```
-3.1 Draw a network and display the top genes related to each signature. Also return the signature-gene pairs information.
-```
-net_info = net_vis(example.result,top.gene = 10)
-```
-![net_vis_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/net_vis_1.png)
+
+![net\_vis\_1](https://github.com/LucasLiu20200131/images/blob/main/git_image/net_vis_1.png)
