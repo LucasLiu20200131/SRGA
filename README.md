@@ -3,7 +3,7 @@ Signature-Related Gene Analysis
 
 For an expression matrix, genes are denoted as $G_1, G_2, \ldots, G_n$, and samples as $S_1, S_2, \ldots, S_m$.
 
-### Gene correlation
+## Gene correlation
 
 The Pearson correlation coefficient between genes $G_i$ and $G_j$ is calculated across the $m$ samples as:
 
@@ -20,7 +20,7 @@ $$
 
 where $G_{iz}$ and $G_{jz}$ represent the expression levels of genes $G_i$ and $G_j$ in sample $z$, respectively, and $\bar{G}_i$ and $\bar{G}_j$ represent their mean expression levels across samples.
 
-### Partial correlation
+## Partial correlation
 
 To account for an independent covariate, such as tumor purity, SRGA can use partial correlation. The partial correlation coefficient between $G_i$ and $G_j$, controlling for tumor purity $P$, is calculated as:
 
@@ -38,7 +38,7 @@ where $CC_{iP}$ and $CC_{jP}$ denote the correlation coefficients between tumor 
 
 Hereafter, the correlation coefficient between $G_i$ and $G_j$ is denoted as $\operatorname{cor}_{ij}$, with the corresponding statistical significance denoted as $p_{ij}$.
 
-### Relative score
+## Relative score
 
 For each selected gene $G_i$, its association with another gene $G_j$ is quantified using a relative score:
 
@@ -52,7 +52,7 @@ $$
 
 Genes are then ranked according to $RS_{ij}$ after removing self-correlations and infinite values.
 
-### Signature enrichment score
+## Signature enrichment score
 
 For each selected gene, its ranked $RS$ gene list is subjected to GSEA against the input signatures. For signature $i$ and selected gene $G_j$, the signature value is calculated as:
 
@@ -66,7 +66,7 @@ $$
 
 where $p_{ij}^{\mathrm{GSEA}}$ is the statistical significance of the enrichment and $NES_{ij}$ is the corresponding normalized enrichment score.
 
-### Relative rank score
+## Relative rank score
 
 To compare enrichment results across signatures, the signature values are rescaled within each signature. For signature $i$ and gene $G_j$:
 
