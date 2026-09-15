@@ -43,8 +43,7 @@ Hereafter, the correlation coefficient between $G_i$ and $G_j$ is denoted as $\o
 For each selected gene $G_i$, its association with another gene $G_j$ is quantified using a relative score:
 
 $$
-RS_{ij}
-=
+RS_{ij}=
 -\log_{10}(p_{ij})
 \times
 \operatorname{sign}(\operatorname{cor}_{ij})
@@ -57,8 +56,7 @@ Genes are then ranked according to $RS_{ij}$ after removing self-correlations an
 For each selected gene, its ranked $RS$ gene list is subjected to GSEA against the input signatures. For signature $i$ and selected gene $G_j$, the signature value is calculated as:
 
 $$
-\operatorname{sigValue}_{ij}
-=
+\operatorname{sigValue}_{ij}=
 -\log_{10}(p_{ij}^{\mathrm{GSEA}})
 \times
 NES_{ij}
@@ -71,8 +69,7 @@ where $p_{ij}^{\mathrm{GSEA}}$ is the statistical significance of the enrichment
 To compare enrichment results across signatures, the signature values are rescaled within each signature. For signature $i$ and gene $G_j$:
 
 $$
-RRS_{ij}
-=
+RRS_{ij}=
 \frac{
 \operatorname{sigValue}_{ij}
 -
@@ -89,8 +86,7 @@ where the minimum and maximum are calculated across all evaluated genes $k$ for 
 The final score of gene $G_j$ is calculated as the mean relative rank score across all $n$ input signatures:
 
 $$
-\operatorname{Rank}(G_j)
-=
+\operatorname{Rank}(G_j)=
 \frac{1}{n}
 \sum_{i=1}^{n} RRS_{ij}
 $$
